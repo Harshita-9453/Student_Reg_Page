@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selectable Table</title>
+<style>
+  table {
+    border-collapse: collapse;
+  }
+  td, th {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+    /* background-color: white; */
+  }
+  .yellow {
+    background-color: yellow !important;
+  }
+  .blue {
+    background-color: blue !important;
+  }
+  .green {
+    background-color: green !important;
+  }
+</style>
+</head>
+<body>
+
+<table id="selectableTable">
+  <tr>
+    <td>Cell</td>
+    <td>Special cell</td>
+    <td>Cell</td>
+  </tr>
+  <tr>
+    <td>Cell</td>
+    <td>Cell</td>
+    <td>Cell</td>
+  </tr>
+  <tr>
+    <td>Cell</td>
+    <td>Cell</td>
+    <td>Cell</td>
+  </tr>
+</table>
+
+<script>
+  const table = document.getElementById('selectableTable');
+  const cells = table.getElementsByTagName('td');
+  const rows = table.getElementsByTagName('tr');
+  const specialCell = table.querySelector('td:nth-child(2):nth-of-type(2)');
+
+  function toggleColor(cell) {
+    if (cell.classList.contains('yellow')) {
+      cell.classList.remove('yellow');
+    } else {
+      cell.classList.add('yellow');
+    }
+  }
+
+  function toggleRowColor(row) {
+    if (row.querySelectorAll('.yellow').length === 0) {
+      row.classList.toggle('blue');
+    }
+  }
+
+  function toggleTableColor() {
+    table.classList.toggle('green');
+    Array.from(cells).forEach(cell => {
+      if (!cell.classList.contains('yellow')) {
+        cell.classList.toggle('green');
+      }
+    });
+  }
+
+  table.addEventListener('click', function(event) {
+    const clickedCell = event.target;
+
+    if (clickedCell.tagName === 'TD') {
+      toggleColor(clickedCell);
+
+      if (clickedCell.cellIndex === 0) {
+        const row = clickedCell.parentNode;
+        toggleRowColor(row);
+      }
+
+      if (clickedCell === specialCell) {
+        toggleTableColor();
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
